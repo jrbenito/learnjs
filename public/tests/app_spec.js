@@ -14,4 +14,11 @@ it('passes the hash view parameters to the view function', function() {
     learnjs.showView('#problem-42');
     expect(learnjs.problemView).toHaveBeenCalledWith('42');
 });
+
+describe('problem view', function(){
+    it('has a title that includes the problem number', function() {
+        var view = learnjs.problemView('1');
+        expect(view.text()).toEqual('Problem #1 Comming soon!');
+    });
+});
 });
