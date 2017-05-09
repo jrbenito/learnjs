@@ -22,6 +22,12 @@ describe('LearnJS', function() {
         expect(learnjs.problemView).toHaveBeenCalledWith('42');
     });
 
+    it('triggers removingView event when removing the view', function() {
+        spyOn(learnjs, 'triggerEvent');
+        learnjs.showView('#problem-1');
+        expect(learnjs.triggerEvent).toHaveBeenCalledWith('removingView', []);
+    });
+
     it('subscribes to the hash change event', function() {
         learnjs.appOnReady();
         spyOn(learnjs, 'showView');
