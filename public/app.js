@@ -91,6 +91,7 @@ learnjs.showView = function(hash) {
     var viewFn = routes[hashParts[0]];
 
     if (viewFn) {
+        learnjs.triggerEvent('removingView', []);
         $('.view-container').empty().append(viewFn(hashParts[1]));
     }
 }
