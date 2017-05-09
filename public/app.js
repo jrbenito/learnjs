@@ -68,13 +68,18 @@ learnjs.problemView = function(data) {
 
     view.find('.check-btn').click(checkAnswerClick);
     view.find('.title').text('Problem #'+problemNumber);
-    learnjs.applyObject(learnjs.problems[problemNumber-1], view);
+    learnjs.applyObject(problemData, view);
     return view;
+}
+
+learnjs.landingView = function() {
+    return learnjs.template('landing-view');
 }
 
 learnjs.showView = function(hash) {
     var routes = {
-        '#problem': learnjs.problemView
+        '#problem': learnjs.problemView,
+        '': learnjs.landingView
     };
 
     var hashParts = hash.split('-');
