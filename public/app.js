@@ -79,6 +79,7 @@ learnjs.landingView = function() {
 learnjs.showView = function(hash) {
     var routes = {
         '#problem': learnjs.problemView,
+        '#': learnjs.landingView,
         '': learnjs.landingView
     };
 
