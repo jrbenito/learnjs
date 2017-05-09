@@ -25,9 +25,13 @@ learnjs.applyObject = function(obj, elem) {
     }
 };
 
+learnjs.template = function(name) {
+    return $('.templates .' + name).clone();
+}
+
 learnjs.problemView = function(data) {
     var problemNumber = parseInt(data, 10);
-    var view = $('.templates .problem-view').clone();
+    var view = learnjs.template('problem-view');
     var problemData = learnjs.problems[problemNumber - 1];
     var resultFlash = view.find('.result');
 
@@ -39,7 +43,9 @@ learnjs.problemView = function(data) {
     
     function checkAnswerClick() {
         if (checkAnswer()) {
-            learnjs.flashElement(resultFlash, 'Correct!');
+            var correctFlash = learnjs.template('correct-flash');
+            correctFlash.find('a').attr('href', '#problem-' + (problemNumber + 1));
+            learnjs.flashElement(resultFlash, correctFlash); 
         } else {
             learnjs.flashElement(resultFlash, 'Incorrect!');
         }
