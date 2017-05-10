@@ -115,6 +115,20 @@ learnjs.appOnReady = function() {
     learnjs.showView(window.location.hash);
 }
 
+learnjs.awsRefresh = function() {
+    var deferred = new $.Deferred();
+
+    AWS.config.credentials.refresh(function(err) {
+        if (err) {
+            deferred.reject(err);
+        } else {
+            deferred.resolve(AWS.config.credentials.identityId);
+        }
+    });
+
+    return deferred.promise();
+}
+
 function googleSignIn(googleUser) {
     var id_token = googleUser.getAuthResponse().id_token;
 
@@ -127,4 +141,15 @@ function googleSignIn(googleUser) {
             }
         })
     })
+
+    function refresh() {
+        return gapi.auth2.getAuthInstance().signIn({
+            prompt: 'login'
+        }).then(function(userUpdate) {
+            var creds = AWS.config.credentials;
+            var newToken = userUpdate.getAuthResponse().id_token;
+            creds.params.Logins['accounts.google.com'] = newToken;
+            return learnjs.awsRefresh();
+        });
+    }
 }
