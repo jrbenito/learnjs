@@ -1,5 +1,7 @@
 'use strict'
-var learnjs = {};
+var learnjs = {
+    poolId: 'us-east-1:442b421d-9882-47e5-8a7f-5444fd92662a'
+};
 
 learnjs.problems = [
     {
@@ -113,6 +115,16 @@ learnjs.appOnReady = function() {
     learnjs.showView(window.location.hash);
 }
 
-function googleSignIn() {
-    console.log(arguments);
+function googleSignIn(googleUser) {
+    var id_token = googleUser.getAuthResponse().id_token;
+
+    AWS.config.update({
+        region: 'us-east-1',
+        credentials: new AWS.CognitoIdentityCredentials({
+            IdentityPoolId: learnjs.poolId,
+            Logins: {
+                'accounts.google.com': id_token
+            }
+        })
+    })
 }
