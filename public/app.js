@@ -3,6 +3,8 @@ var learnjs = {
     poolId: 'us-east-1:442b421d-9882-47e5-8a7f-5444fd92662a'
 };
 
+learnjs.identity = new $.Deferred();
+
 learnjs.problems = [
     {
         description: "What is truth?",
@@ -152,4 +154,12 @@ function googleSignIn(googleUser) {
             return learnjs.awsRefresh();
         });
     }
+
+    learnjs.awsRefresh().then(function(id) {
+        learnjs.identity.resolve({
+            id: id,
+            email: googleUser.getBasicProfile().getEmail(),
+            refresh: refresh
+        });
+    });
 }
