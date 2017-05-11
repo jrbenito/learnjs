@@ -37,6 +37,12 @@ learnjs.template = function(name) {
     return $('.templates .' + name).clone();
 }
 
+learnjs.addProfileLink = function(profile) {
+    var link = learnjs.template('profile-link');
+    link.find('a').text(profile.email);
+    $('.signin-bar').prepend(link);
+}
+
 learnjs.buildCorrectFlash = function (problemNum) {
     var correctFlash = learnjs.template('correct-flash');
     var link = correctFlash.find('a');
@@ -125,6 +131,7 @@ learnjs.appOnReady = function() {
     };
 
     learnjs.showView(window.location.hash);
+    learnjs.identity.done(learnjs.addProfileLink);
 }
 
 learnjs.awsRefresh = function() {
