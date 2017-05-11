@@ -93,9 +93,19 @@ learnjs.landingView = function() {
     return learnjs.template('landing-view');
 }
 
+learnjs.profileView = function() {
+    var view = learnjs.template('profile-view');
+    learnjs.identity.done(function(identity) {
+        view.find('.email').text(identity.email);
+    });
+
+    return view;
+}
+
 learnjs.showView = function(hash) {
     var routes = {
         '#problem': learnjs.problemView,
+        '#profile': learnjs.profileView,
         '#': learnjs.landingView,
         '': learnjs.landingView
     };
