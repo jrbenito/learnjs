@@ -20,6 +20,9 @@ learnjs.triggerEvent = function(name, args) {
     $('.view-container>*').trigger(name, args);
 }
 
+learnjs.saveAnswer = function() {
+}
+
 learnjs.flashElement = function(elem, content) {
     elem.fadeOut('fast',function() {
         elem.html(content);
