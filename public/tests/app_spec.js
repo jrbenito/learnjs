@@ -4,15 +4,28 @@ describe('LearnJS', function() {
         learnjs.identity = new $.Deferred();
     });
 
+    describe('changing views', function() {
+        beforeEach(function() {
+            fetchAnswerDef = new $.Deferred();
+            spyOn(learnjs, 'fetchAnswer').and.returnValue(fetchAnswerDef);
+        });
+
+        it('can show a problem view', function() {
+            learnjs.showView('#problem-1');
+            expect($('.view-container .problem-view').length).toEqual(1);
+        });
+
+        it('triggers removingView event when removing the view', function() {
+            spyOn(learnjs, 'triggerEvent');
+            learnjs.showView('#problem-1');
+            expect(learnjs.triggerEvent).toHaveBeenCalledWith('removingView', []);
+        });
+    });
+
     it('invokes the router when loaded', function() {
         spyOn(learnjs,'showView');
         learnjs.appOnReady();
         expect(learnjs.showView).toHaveBeenCalledWith(window.location.hash);
-    });
-
-    it('can show a problem view', function() {
-        learnjs.showView('#problem-1');
-        expect($('.view-container .problem-view').length).toEqual(1);
     });
 
     it('shows the landing page view when there is no hash', function() {
@@ -24,12 +37,6 @@ describe('LearnJS', function() {
         spyOn(learnjs,'problemView');
         learnjs.showView('#problem-42');
         expect(learnjs.problemView).toHaveBeenCalledWith('42');
-    });
-
-    it('triggers removingView event when removing the view', function() {
-        spyOn(learnjs, 'triggerEvent');
-        learnjs.showView('#problem-1');
-        expect(learnjs.triggerEvent).toHaveBeenCalledWith('removingView', []);
     });
 
     it('subscribes to the hash change event', function() {
@@ -268,9 +275,30 @@ describe('LearnJS', function() {
     });
 
     describe('problem view', function(){
-        var view;
+        var view, fetchAnswerDef;
+
         beforeEach(function() {
+            fetchAnswerDef = new $.Deferred();
+            spyOn(learnjs, 'fetchAnswer').and.returnValue(fetchAnswerDef);
             view = learnjs.problemView('1');
+        });
+
+        it('loads the previous answer, if there is one', function(done) {
+            fetchAnswerDef.resolve({Item: {answer: 'true'}}).then(function() {
+                expect(view.find('.answer').val()).toEqual('true');
+                done();
+            });
+        });
+
+        it('keeps the answer blank until the promise is resolved', function() {
+            expect(view.find('.answer').val()).toEqual('');
+        });
+
+        it('does nothing if the question has not been answered yet', function(done) {
+            fetchAnswerDef.resolve({}).then(function() {
+                expect(view.find('.answer').val()).toEqual('');
+                done();
+            });
         });
 
         it('has a title that includes the problem number', function() {
