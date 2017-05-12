@@ -43,6 +43,19 @@ learnjs.sendDbRequest = function(req, retry) {
 }
 
 learnjs.fetchAnswer = function(problemId) {
+    return learnjs.identity.then(function(identity) {
+        var db = new AWS.DynamoDB.DocumentClient();
+        var item = {
+            TableName: 'learnjs',
+            Key: {
+                userId: identity.id,
+                problemId: problemId
+            }
+        };
+        return learnjs.sendDbRequest(db.get(item), function() {
+            learnjs.fetchAnswer(problemId);
+        });
+    });
 };
 
 learnjs.saveAnswer = function(problemId, answer) {
