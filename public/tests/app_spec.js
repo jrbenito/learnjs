@@ -22,21 +22,21 @@ describe('LearnJS', function() {
         });
     });
 
-    it('invokes the router when loaded', function() {
-        spyOn(learnjs,'showView');
-        learnjs.appOnReady();
-        expect(learnjs.showView).toHaveBeenCalledWith(window.location.hash);
-    });
-
     it('shows the landing page view when there is no hash', function() {
         learnjs.showView('');
         expect($('.view-container .landing-view').length).toEqual(1);
     });
 
-    it('passes the hash view parameters to the view function', function() {
+    it('passes the hash view parameter to the view function', function() {
         spyOn(learnjs,'problemView');
         learnjs.showView('#problem-42');
         expect(learnjs.problemView).toHaveBeenCalledWith('42');
+    });
+
+    it('invokes the router when loaded', function() {
+        spyOn(learnjs,'showView');
+        learnjs.appOnReady();
+        expect(learnjs.showView).toHaveBeenCalledWith(window.location.hash);
     });
 
     it('subscribes to the hash change event', function() {
@@ -59,7 +59,7 @@ describe('LearnJS', function() {
     it('can redirect to the main view after the last problem is answered', function() {
         var flash = learnjs.buildCorrectFlash(2);
         expect(flash.find('a').attr('href')).toEqual("");
-        expect(flash.find('a').text()).toEqual("You´re Finished!");
+        expect(flash.find('a').text()).toEqual("You're Finished!");
     });
 
     it('can trigger events on the view', function() {
@@ -72,7 +72,7 @@ describe('LearnJS', function() {
     });
 
     it('adds the profile link when the user logs in', function() {
-        var profile = {email: 'foo@bar.com'}
+        var profile = {email: 'foo@bar.com'};
         spyOn(learnjs, 'addProfileLink');
         learnjs.appOnReady();
         learnjs.identity.resolve(profile);
@@ -117,12 +117,12 @@ describe('LearnJS', function() {
 				});
 			});
 
-            it('resubmits the request on retry', function() {
-                learnjs.fetchAnswer(1, {answer: 'fasle'});
-                spyOn(learnjs, 'fetchAnswer').and.returnValue('promise');
-                expect(learnjs.sendDbRequest.calls.first().args[1]()).toEqual('promise');
-                expect(learnjs.fetchAnswer).toHaveBeenCalledWith(1);
-            });
+			it('resubmits the request on retry', function() {
+				learnjs.fetchAnswer(1, {answer: 'false'});
+				spyOn(learnjs, 'fetchAnswer').and.returnValue('promise');
+				expect(learnjs.sendDbRequest.calls.first().args[1]()).toEqual('promise');
+				expect(learnjs.fetchAnswer).toHaveBeenCalledWith(1);
+			});
         });
 
         describe('saveAnswer', function() {
@@ -166,7 +166,7 @@ describe('LearnJS', function() {
             promise = learnjs.sendDbRequest(request, retrySpy);
         });
 
-        it('resolves the returned promise on sucess', function(done){
+        it('resolves the returned promise on success', function(done){
             requestHandlers.success({data: 'data'});
             expect(request.send).toHaveBeenCalled();
             promise.then(function(data) {
@@ -203,7 +203,7 @@ describe('LearnJS', function() {
             });
         });
 
-        it('returns a promise that resolves on sucess', function(done) {
+        it('returns a promise that resolves on success', function(done) {
             learnjs.awsRefresh().then(function(id) {
                 expect(fakeCreds.identityId).toEqual('COGNITO_ID');
             }).then(done, fail);
@@ -346,7 +346,7 @@ describe('LearnJS', function() {
         });
 
         it('shows the problem code', function() {
-            expect(view.find('[data-name="code"]').text()).toEqual('function problem() { return ___;}');
+            expect(view.find('[data-name="code"]').text()).toEqual('function problem() { return __;}');
         });
 
         describe('skip button', function() {

@@ -1,4 +1,4 @@
-'use strict'
+"use strict"
 var learnjs = {
     poolId: 'us-east-1:442b421d-9882-47e5-8a7f-5444fd92662a'
 };
@@ -8,11 +8,11 @@ learnjs.identity = new $.Deferred();
 learnjs.problems = [
     {
         description: "What is truth?",
-        code: "function problem() { return ___;}"
+        code: "function problem() { return __;}"
     },
     {
         description: "Simple Math",
-        code: "function problem() { return 42 === 6 * ___;}"
+        code: "function problem() { return 42 === 6 * __;}"
     }
 ];
 
@@ -53,7 +53,7 @@ learnjs.fetchAnswer = function(problemId) {
             }
         };
         return learnjs.sendDbRequest(db.get(item), function() {
-            learnjs.fetchAnswer(problemId);
+            return learnjs.fetchAnswer(problemId);
         });
     });
 };
@@ -73,13 +73,10 @@ learnjs.saveAnswer = function(problemId, answer) {
             return learnjs.saveAnswer(problemId, answer);
         })
     });
-}
+};
 
-learnjs.flashElement = function(elem, content) {
-    elem.fadeOut('fast',function() {
-        elem.html(content);
-        elem.fadeIn();
-    });
+learnjs.template = function(name) {
+    return $('.templates .' + name).clone();
 }
 
 learnjs.applyObject = function(obj, elem) {
@@ -88,14 +85,17 @@ learnjs.applyObject = function(obj, elem) {
     }
 };
 
-learnjs.template = function(name) {
-    return $('.templates .' + name).clone();
-}
-
 learnjs.addProfileLink = function(profile) {
     var link = learnjs.template('profile-link');
     link.find('a').text(profile.email);
     $('.signin-bar').prepend(link);
+}
+
+learnjs.flashElement = function(elem, content) {
+    elem.fadeOut('fast',function() {
+        elem.html(content);
+        elem.fadeIn();
+    });
 }
 
 learnjs.buildCorrectFlash = function (problemNum) {
@@ -106,7 +106,7 @@ learnjs.buildCorrectFlash = function (problemNum) {
         link.attr('href', '#problem-' + (problemNum + 1));
     } else {
         link.attr('href','');
-        link.text("You´re Finished!");
+        link.text("You're Finished!");
     }
 
     return correctFlash;
@@ -120,7 +120,7 @@ learnjs.problemView = function(data) {
     var answer = view.find('.answer');
 
     function checkAnswer() {
-        var test = problemData.code.replace('___', answer.val()) + '; problem();';
+        var test = problemData.code.replace('__', answer.val()) + '; problem();';
         return eval(test);
     }
     
