@@ -20,7 +20,7 @@ learnjs.triggerEvent = function(name, args) {
     $('.view-container>*').trigger(name, args);
 }
 
-learnjs.sendDbRequest = function(req, retry) {
+learnjs.sendAwsRequest = function(req, retry) {
   var promise = new $.Deferred();
   req.on('error', function(error) {
     if (error.code === "CredentialsError") { 
@@ -52,7 +52,7 @@ learnjs.fetchAnswer = function(problemId) {
                 problemId: problemId
             }
         };
-        return learnjs.sendDbRequest(db.get(item), function() {
+        return learnjs.sendAwsRequest(db.get(item), function() {
             return learnjs.fetchAnswer(problemId);
         });
     });
@@ -67,7 +67,7 @@ learnjs.countAnswers = function(problemId) {
       FilterExpression: 'problemId = :problemId',
       ExpressionAttributeValues: {':problemId': problemId}
     };
-    return learnjs.sendDbRequest(db.scan(params), function() {
+    return learnjs.sendAwsRequest(db.scan(params), function() {
       return learnjs.countAnswers(problemId);
     })
   });
@@ -84,7 +84,7 @@ learnjs.saveAnswer = function(problemId, answer) {
                 answer: answer
             }
         };
-        return learnjs.sendDbRequest(db.put(item), function() {
+        return learnjs.sendAwsRequest(db.put(item), function() {
             return learnjs.saveAnswer(problemId, answer);
         })
     });
